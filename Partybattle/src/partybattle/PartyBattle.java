@@ -23,8 +23,6 @@ public class PartyBattle implements Runnable {
 	
 	public static void main(String[] args) {
 		System.out.println("Working Directory = " + System.getProperty("user.dir"));
-		SwingUtilities.invokeLater(new PartyBattle());
-
-		
+		SwingUtilities.invokeLater(new PartyBattle());		
 	}
 }

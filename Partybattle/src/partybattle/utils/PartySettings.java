@@ -13,25 +13,27 @@ public class PartySettings {
 		 *    "cols": 7,
 		 *    "rows": 7,
 		 *    "backgroundImage": "/path/to/image"
-		 *    "guests": {
-		 *        "someId": {
-		 *            "name": "Foo Barsson",
-		 *            "compadre": "otherId",
-		 *            "col": 5,
-		 *            "row": 7
-		 *        },
-		 *        "otherId": {
-		 *            "name": "Bar Foosson",
-		 *            "compadre": "otherId",
-		 *            "col": 5,
-		 *            "row": 7
+		 *    "boats": [
+		 *        [
+		 *            {
+		 *                "name": "Foo Barsson",
+		 *                "col": 5,
+		 *                "row": 7
+		 *            },
+		 *            {
+		 *                "name": "Bar Foosson",
+		 *                "col": 5,
+		 *                "row": 7
+		 *            }
+		 *        ]
+		 *    ],
+		 *    "guestOfHonors": [
+		 *        {
+		 *            "name": "Ufuk",
+		 *            "col": 1,
+		 *            "row": 1
 		 *        }
-		 *        "ufuk": {
-		 *            "name": "Mr. Turkelton",
-		 *            "special": true,
-		 *            "col": 6,
-		 *            "row": 6
-		 *        }
+		 *    ]
 		 *    }
 		 * }
 		 */
@@ -63,5 +65,10 @@ public class PartySettings {
 		}
 		
 		return null;
+	}
+
+	public PartyGuest getGuestAt(int col, int row) {
+		// TODO read from file
+		return new PartyGuest("Foo Barsson", new PartyBoat());
 	}
 }

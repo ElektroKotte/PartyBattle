@@ -9,14 +9,12 @@ public class PartyBattle implements Runnable {
 
 	private PartySettings settings;
 	
-	public PartyBattle()
-	{
+	public PartyBattle() {
 		this.settings = new PartySettings();
 		// TODO set up variables and so
 	}
 	
-	public void run()
-	{
+	public void run() {
 		BattleWindow window = new BattleWindow(settings);
 		window.setVisible(true);
 	}

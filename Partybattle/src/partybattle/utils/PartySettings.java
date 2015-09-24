@@ -3,6 +3,20 @@ package partybattle.utils;
 import javax.swing.ImageIcon;
 
 public class PartySettings {
+	private int cols;
+	private int rows;
+	
+	private PartyGuest[][] guests;
+	private String mapImagePath;
+	private String explosionImagePath;
+	private String boatImagePath;
+	
+	private void addGuestAt(String guestName, PartyBoat boat, int col, int row) {
+		guests[col][row] = new PartyGuest(guestName, boat);
+		if (boat != null) {
+			boat.addCrewMember(guests[col][row]);
+		}
+	}
 	
 	public PartySettings(String settingsFilePath) {
 		/* TODO open the given file
@@ -37,6 +51,27 @@ public class PartySettings {
 		 *    }
 		 * }
 		 */
+		
+		// TODO read settings to find out cols and rows
+		cols = 8;
+		rows = 8;
+		guests = new PartyGuest[cols][rows];
+		
+		mapImagePath = "map.jpg";
+		explosionImagePath = "fire.png";
+		boatImagePath = "boat.png";
+		
+		PartyBoat boat;
+		
+		boat = new PartyBoat("MS Whatknot");
+		addGuestAt("John Dorian", boat, 3, 3);
+		addGuestAt("Christoffer Turk", boat, 3, 4);
+		
+		boat = new PartyBoat("MS Herpaderp");
+		addGuestAt("Perry Cox", boat, 2, 2);
+		addGuestAt("Dr. Kelso", boat, 2, 3);
+		
+		addGuestAt("Ufuk Kirik", null, 1, 1);
 	}
 	
 	public PartySettings() {
@@ -44,31 +79,37 @@ public class PartySettings {
 	}
 
 	public int getRows() {
-		// TODO read from settings file
-		return 5;
+		return rows;
 	}
 
 	public int getCols() {
-		// TODO read value from settings file
-		return 5;
+		return cols;
 	}
 
 	public String getBackgroundImagePath() {
-		// TODO read from settings file
-		return "map.jpg";
+		return mapImagePath;
 	}
 
 	public ImageIcon getImageForButton(int col, int row) {
-		// TODO return icon if the coordinates should use special image
-		if (col == 1 && row == 1) {
-			return new ImageIcon("lighthouse.png");
+		ImageIcon image = null;
+		PartyGuest guest =  guests[col][row];
+		
+		if (guest != null && guest.getBoat() == null) {
+			image = new ImageIcon("lighthouse.png");
 		}
 		
-		return null;
+		return image;
+	}
+	
+	public String getExplsionImagePath() {
+		return explosionImagePath;
+	}
+	
+	public String getBoatImagePath() {
+		return boatImagePath;
 	}
 
 	public PartyGuest getGuestAt(int col, int row) {
-		// TODO read from file
-		return new PartyGuest("Foo Barsson", new PartyBoat());
+		return guests[col][row];
 	}
 }

@@ -1,0 +1,9 @@
+{
+	"cols": 8,
+	"rows": 8,
+	"backgroundImagePath": "map.jpg",
+	"explosionImagePath": "fire.png",
+	"boatImagePath": "boat.png",
+	"splashImagePath": "miss.png"
+}
+

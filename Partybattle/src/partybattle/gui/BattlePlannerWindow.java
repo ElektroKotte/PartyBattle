@@ -11,7 +11,7 @@ import java.util.Random;
 
 import javax.swing.*;
 
-public class BattleWindow extends JFrame implements ActionListener{
+public class BattlePlannerWindow extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 3427642868750313104L;
 	
 	private HashMap<String, PartyGuest> guest_map;
@@ -23,11 +23,10 @@ public class BattleWindow extends JFrame implements ActionListener{
 	private final int COLS;
 	private final int ROWS;
 	
-	private PartySettings settings;
-	
-	public BattleWindow(PartySettings settings)
+	public BattlePlannerWindow(PartySettings settings)
 	{
 		super("PartyBattle");
+		/*
 		
 		guest_map = new HashMap<>();
 		
@@ -37,10 +36,11 @@ public class BattleWindow extends JFrame implements ActionListener{
 		rng = new Random();
 		
 		this.settings = settings;
+		*/
 		
 		COLS = settings.getCols();
 		ROWS = settings.getRows();
-		
+		/*
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		GridLayout layout = new GridLayout(settings.getRows(), settings.getCols());
@@ -79,56 +79,10 @@ public class BattleWindow extends JFrame implements ActionListener{
 		setSize(new Dimension(800, 600));
 		
         pack();
+        */
 	}
-	
-	public void actionPerformed(ActionEvent e) {
-		PartyGuest guest = guest_map.get(e.getActionCommand());
-		if (guest == null) {
-			System.out.println("Miss!");
-			return;
-		}
 
-		PartyBoat boat = guest.getBoat();
-		if (boat == null) {
-			System.out.println("A guest of honor was hit!");
-			shootRandom();
-		} else {
-			shootGuest(guest, boat);
-		}
-	}
-	
-	private void shootRandom() {
-		PartyGuest guest = null;
-		
-		// TODO Should be a better method for this. Also would be good to check if there more people alive
-		while (guest == null || !guest.isAlive() || guest.getBoat() == null) {
-			int row = Math.abs(rng.nextInt()) % ROWS;
-			int col = Math.abs(rng.nextInt()) % COLS;
-			System.out.println("Bouncing to " + col + ", " + row);
-			guest = settings.getGuestAt(col, row);
-		}
-		shootGuest(guest, guest.getBoat());
-	}
-	
-	private void shootGuest(PartyGuest guest, PartyBoat boat) {
-		
-		
-		guest.getTriggerButton().setIcon(explosionImage);
-		guest.setAlive(false);
-		
-		System.out.println("Waa! The guest " + guest.getName() + " of " + boat.getName() + " was hit!");
-		
-		boolean sunkBoat = true;
-		for (PartyGuest crew : boat.getCrew()) {
-			if (crew != guest && crew.isAlive()) {
-				crew.getTriggerButton().setIcon(boatImage);
-				System.out.println(crew.getName() + " is now allowed to shoot!");
-				sunkBoat = false;
-			}
-		}
-		
-		if (sunkBoat) {
-			System.out.println("The ship " + boat.getName() + " is no moar! The guest of honor may take a shot!");
-		}
+
+	public void actionPerformed(ActionEvent e) {
 	}
 }

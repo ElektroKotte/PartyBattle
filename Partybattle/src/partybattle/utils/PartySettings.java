@@ -23,53 +23,56 @@ public class PartySettings {
 		int col;
 		int row;
 	}
+	
 	private class Boat {
 		String name;
 		Guest[] guests;
 	}
-	private class Settings {
-		int cols;
-		int rows;
 		
-		String backgroundImage;
-		String explosionImage;
-		String boatImage;
-		
+	private class BattlePlan {
 		Guest[] guestsOfHonor;
 		Boat[] boats;
 	}
 	
-	private class SettingsDeserializer implements JsonDeserializer<Settings> {
+	private class Settings {
+		int cols;
+		int rows;
+		String backgroundImagePath;
+		String explosionImagePath;
+		String boatImagePath;
+	}
+	
+	private class Guests {
+		String[] guestsOfHonor;
+		String[][] guests;
+	}
+	
+	private String[][] guestNames;
+	private String[] guestsOfHonor;
+	
+	private class SettingsDeserializer implements JsonDeserializer<BattlePlan> {
 
 		@Override
-		public Settings deserialize(JsonElement json, Type type, JsonDeserializationContext context)
+		public BattlePlan deserialize(JsonElement json, Type type, JsonDeserializationContext context)
 				throws JsonParseException {
 			final JsonObject thisObject = json.getAsJsonObject();
-			Settings settings = new Settings();
-			settings.cols = thisObject.get("cols").getAsInt();
-			settings.rows = thisObject.get("rows").getAsInt(); 
-			
-			settings.backgroundImage = thisObject.get("backgroundImage").getAsString();
-			settings.explosionImage = thisObject.get("explosionImage").getAsString();
-			settings.boatImage = thisObject.get("boatImage").getAsString();
-			
-			settings.guestsOfHonor = context.deserialize(thisObject.get("guestsOfHonor"), Guest[].class);
-			
+			BattlePlan guests = new BattlePlan();
+
+			guests.guestsOfHonor = context.deserialize(thisObject.get("guestsOfHonor"), Guest[].class);
+
 			JsonArray jsonBoats = thisObject.get("boats").getAsJsonArray(); 
-			
-			settings.boats = new Boat[jsonBoats.size()];
+			guests.boats = new Boat[jsonBoats.size()];
 			for (int i = 0; i < jsonBoats.size(); i++) {
 				JsonObject jsonBoat = jsonBoats.get(i).getAsJsonObject();
 				Boat boat = new Boat();
 				boat.name = jsonBoat.get("name").getAsString();
 				boat.guests = context.deserialize(jsonBoat.get("guests"), Guest[].class);
-				settings.boats[i] = boat;
-				
+				guests.boats[i] = boat;
+
 			}
-			
-			return settings;
+
+			return guests;
 		}
-		
 	}
 	
 	private int cols;
@@ -87,44 +90,55 @@ public class PartySettings {
 		}
 	}
 	
-	public PartySettings(String settingsFilePath) throws IOException {
+	public PartySettings(String settingsFilePath, String battleSettingsFilePath, String guestsFilePath) throws IOException {
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(Settings.class, new SettingsDeserializer());
+		gsonBuilder.registerTypeAdapter(BattlePlan.class, new SettingsDeserializer());
 		Gson gson = gsonBuilder.create();
 		
-		InputStream inputStream = new FileInputStream(settingsFilePath);
-		InputStreamReader reader = new InputStreamReader(inputStream);
-		Settings settings = gson.fromJson(reader, Settings.class);
+		InputStream settingsInput = new FileInputStream(battleSettingsFilePath);
+		InputStreamReader settingsReaderInput = new InputStreamReader(settingsInput);
+		Settings settings = gson.fromJson(settingsReaderInput, Settings.class);
+		
+		InputStream battleSettingsInput = new FileInputStream(settingsFilePath);
+		InputStreamReader battleSettingsInputReader = new InputStreamReader(battleSettingsInput);
+		BattlePlan battlePlan = gson.fromJson(battleSettingsInputReader, BattlePlan.class);
+		
+		InputStream guestsInput = new FileInputStream(guestsFilePath);
+		InputStreamReader guestsInputStreamReader = new InputStreamReader(guestsInput);
+		Guests guests = gson.fromJson(guestsInputStreamReader, Guests.class);
+		
+		this.guestNames = guests.guests;
+		this.guestsOfHonor = guests.guestsOfHonor;
 		
 		PartyLog.log("Reader cols = " + settings.cols + ", rows = " + settings.rows);
 		
 		PartyLog.log("The following guests are special");
-		for (Guest guest : settings.guestsOfHonor) {
+		for (Guest guest : battlePlan.guestsOfHonor) {
 			PartyLog.log(guest.name + " at " + guest.col + ", " + guest.row);
 		}
 		
 		PartyLog.log("The following boats exist");
-		for (Boat boat : settings.boats) {
+		for (Boat boat : battlePlan.boats) {
 			PartyLog.log("boat: " + boat.name);
 			for (Guest guest : boat.guests) {
 				PartyLog.log(guest.name + " at " + guest.col + ", " + guest.row);
 			}
 		}
 		
-		this.boatImagePath = settings.boatImage;
-		this.explosionImagePath = settings.explosionImage;
-		this.mapImagePath = settings.backgroundImage;
+		this.boatImagePath = settings.boatImagePath;
+		this.explosionImagePath = settings.explosionImagePath;
+		this.mapImagePath = settings.backgroundImagePath;
 		
 		this.cols = settings.cols;
 		this.rows = settings.rows;
 		
 		this.guests = new PartyGuest[this.cols][this.rows];
 		
-		for (Guest guest : settings.guestsOfHonor) {
+		for (Guest guest : battlePlan.guestsOfHonor) {
 			addGuestAt(guest.name, null, guest.col, guest.row);
 		}
 		
-		for (Boat boat : settings.boats) {
+		for (Boat boat : battlePlan.boats) {
 			PartyBoat tmpBoat = new PartyBoat(boat.name);
 			for (Guest guest : boat.guests) {
 				addGuestAt(guest.name, tmpBoat, guest.col, guest.row);	
@@ -133,7 +147,7 @@ public class PartySettings {
 	}
 	
 	public PartySettings() throws IOException {
-		this("settings.json");
+		this("settings.json", "battle_settings.json", "guests.json");
 	}
 
 	public int getRows() {
@@ -169,5 +183,13 @@ public class PartySettings {
 
 	public PartyGuest getGuestAt(int col, int row) {
 		return guests[col][row];
+	}
+	
+	public String[][] getGuests() {
+		return guestNames;
+	}
+	
+	public String[] getGuestsOfHonor() {
+		return guestsOfHonor;
 	}
 }

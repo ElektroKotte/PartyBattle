@@ -40,6 +40,7 @@ public class PartySettings {
 		String backgroundImagePath;
 		String explosionImagePath;
 		String boatImagePath;
+		String splashImagePath;
 	}
 	
 	private class Guests {
@@ -82,6 +83,7 @@ public class PartySettings {
 	private String mapImagePath;
 	private String explosionImagePath;
 	private String boatImagePath;
+	private String splashImagePath;
 	
 	private void addGuestAt(String guestName, PartyBoat boat, int col, int row) {
 		guests[col][row] = new PartyGuest(guestName, boat);
@@ -90,16 +92,16 @@ public class PartySettings {
 		}
 	}
 	
-	public PartySettings(String settingsFilePath, String battleSettingsFilePath, String guestsFilePath) throws IOException {
+	public PartySettings(String settingsFilePath, String battlePlanFilePath, String guestsFilePath) throws IOException {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(BattlePlan.class, new SettingsDeserializer());
 		Gson gson = gsonBuilder.create();
 		
-		InputStream settingsInput = new FileInputStream(battleSettingsFilePath);
+		InputStream settingsInput = new FileInputStream(settingsFilePath);
 		InputStreamReader settingsReaderInput = new InputStreamReader(settingsInput);
 		Settings settings = gson.fromJson(settingsReaderInput, Settings.class);
 		
-		InputStream battleSettingsInput = new FileInputStream(settingsFilePath);
+		InputStream battleSettingsInput = new FileInputStream(battlePlanFilePath);
 		InputStreamReader battleSettingsInputReader = new InputStreamReader(battleSettingsInput);
 		BattlePlan battlePlan = gson.fromJson(battleSettingsInputReader, BattlePlan.class);
 		
@@ -128,6 +130,7 @@ public class PartySettings {
 		this.boatImagePath = settings.boatImagePath;
 		this.explosionImagePath = settings.explosionImagePath;
 		this.mapImagePath = settings.backgroundImagePath;
+		this.splashImagePath = settings.splashImagePath;
 		
 		this.cols = settings.cols;
 		this.rows = settings.rows;
@@ -147,7 +150,7 @@ public class PartySettings {
 	}
 	
 	public PartySettings() throws IOException {
-		this("settings.json", "battle_settings.json", "guests.json");
+		this("settings.json", "battle_plan.json", "guests.json");
 	}
 
 	public int getRows() {
@@ -191,5 +194,9 @@ public class PartySettings {
 	
 	public String[] getGuestsOfHonor() {
 		return guestsOfHonor;
+	}
+
+	public String getSplashImagePath() {
+		return splashImagePath;
 	}
 }

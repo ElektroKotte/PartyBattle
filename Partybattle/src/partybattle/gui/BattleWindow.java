@@ -14,10 +14,21 @@ import javax.swing.*;
 public class BattleWindow extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 3427642868750313104L;
 	
-	private HashMap<String, PartyGuest> guest_map;
+	private class ButtonData {
+		private JButton button;
+		private PartyGuest guest;
+
+		ButtonData(JButton button, PartyGuest guest) {
+			this.button = button;
+			this.guest = guest;
+		}
+	}
+	
+	private HashMap<String, ButtonData> buttonMap;
 	
 	private ImageIcon explosionImage;
 	private ImageIcon boatImage;
+	private ImageIcon splashImage;
 	private Random rng;
 	
 	private final int COLS;
@@ -29,10 +40,11 @@ public class BattleWindow extends JFrame implements ActionListener{
 	{
 		super("PartyBattle");
 		
-		guest_map = new HashMap<>();
+		buttonMap = new HashMap<String, ButtonData>();
 		
 		explosionImage = new ImageIcon(settings.getExplsionImagePath());
 		boatImage = new ImageIcon(settings.getBoatImagePath());
+		splashImage = new ImageIcon(settings.getSplashImagePath());
 		
 		rng = new Random();
 		
@@ -70,7 +82,7 @@ public class BattleWindow extends JFrame implements ActionListener{
 				button.setActionCommand(identifier);
 				button.addActionListener(this);
 
-				guest_map.put(identifier, guest);
+				buttonMap.put(identifier, new ButtonData(button, guest));
 				
 				add(button);
 			}
@@ -82,18 +94,19 @@ public class BattleWindow extends JFrame implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		PartyGuest guest = guest_map.get(e.getActionCommand());
-		if (guest == null) {
+		ButtonData buttonData = buttonMap.get(e.getActionCommand());
+		if (buttonData.guest == null) {
 			System.out.println("Miss!");
+			buttonData.button.setIcon(splashImage);
 			return;
 		}
 
-		PartyBoat boat = guest.getBoat();
+		PartyBoat boat = buttonData.guest.getBoat();
 		if (boat == null) {
 			System.out.println("A guest of honor was hit!");
 			shootRandom();
 		} else {
-			shootGuest(guest, boat);
+			shootGuest(buttonData.guest, boat);
 		}
 	}
 	

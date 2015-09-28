@@ -1,9 +1,4 @@
 {
-	"cols": 8,
-	"rows": 8,
-	"backgroundImage": "map.jpg",
-	"explosionImage": "fire.png",
-	"boatImage": "boat.png",
 	"guestsOfHonor": [
 		{
 			"name": "Ufuk",

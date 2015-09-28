@@ -1,5 +1,7 @@
 package partybattle;
 
+import java.io.IOException;
+
 import javax.swing.SwingUtilities;
 
 import partybattle.gui.*;
@@ -10,8 +12,11 @@ public class PartyBattle implements Runnable {
 	private PartySettings settings;
 	
 	public PartyBattle() {
-		this.settings = new PartySettings();
-		// TODO set up variables and so
+		try {
+			this.settings = new PartySettings();
+		} catch (IOException e) {
+			PartyLog.log("Error while reading settings file: " + e.getMessage());
+		}
 	}
 	
 	public void run() {
@@ -20,7 +25,6 @@ public class PartyBattle implements Runnable {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		SwingUtilities.invokeLater(new PartyBattle());		
 	}
 }

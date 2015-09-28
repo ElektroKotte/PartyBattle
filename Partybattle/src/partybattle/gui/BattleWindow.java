@@ -6,18 +6,21 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.*;
 
-public class BattleWindow extends JFrame implements ActionListener{
+public class BattleWindow extends JFrame {
 	private static final long serialVersionUID = 3427642868750313104L;
-	
-	private HashMap<String, PartyGuest> guest_map;
+
+	private PartyGuest[][] guestGrid;
+	private BattleSquare[][] squareGrid;
 	
 	private ImageIcon explosionImage;
 	private ImageIcon boatImage;
+	private ImageIcon missImage;
 	private Random rng;
 	
 	private final int COLS;
@@ -29,10 +32,9 @@ public class BattleWindow extends JFrame implements ActionListener{
 	{
 		super("PartyBattle");
 		
-		guest_map = new HashMap();
-		
 		explosionImage = new ImageIcon(settings.getExplsionImagePath());
 		boatImage = new ImageIcon(settings.getBoatImagePath());
+		missImage = new ImageIcon(settings.getMissImagePath());
 		
 		rng = new Random();
 		
@@ -40,6 +42,9 @@ public class BattleWindow extends JFrame implements ActionListener{
 		
 		COLS = settings.getCols();
 		ROWS = settings.getRows();
+		
+		guestGrid = new PartyGuest[COLS][ROWS];
+		squareGrid = new BattleSquare[COLS][ROWS];
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -61,11 +66,21 @@ public class BattleWindow extends JFrame implements ActionListener{
 				} else if (col < 0 && row >= 0) {
 					add(legendLabel(""+(row+1)));
 				} else if (col >= 0 && row >= 0) {
+					BattleSquare r 		= new BattleSquare(col, row, this);
+					PartyGuest guest 	= settings.getGuestAt(col, row);
+					guestGrid[col][row] = guest;
+					squareGrid[col][row] = r;
+					if (guest.isSpecial()) {
+						System.out.println("Setting image for " + col + ", " + row);
+						r.setIcon(settings.getImageForButton(col, row));
+					}
+					add(r);
+					/*
 					JButton button = new JButton();
 					String identifier = col + "," + row;
-					PartyGuest guest = settings.getGuestAt(col, row);
 					if (guest != null) {
 						guest.setTriggerButton(button);
+						guestGrid[col][row] = guest;
 					}
 					
 					ImageIcon image = settings.getImageForButton(col, row);
@@ -77,11 +92,10 @@ public class BattleWindow extends JFrame implements ActionListener{
 					button.setContentAreaFilled(false);
 					button.setBorderPainted(true);
 					button.setActionCommand(identifier);
+					button.setBorder(BorderFactory.createLineBorder(Color.black));
 					button.addActionListener(this);
-	
-					guest_map.put(identifier, guest);
-					
 					add(button);
+					 */
 				}
 			}
 		}
@@ -90,7 +104,7 @@ public class BattleWindow extends JFrame implements ActionListener{
 		
         pack();
 	}
-	
+	/*
 	public void actionPerformed(ActionEvent e) {
 		PartyGuest guest = guest_map.get(e.getActionCommand());
 		if (guest == null) {
@@ -119,11 +133,28 @@ public class BattleWindow extends JFrame implements ActionListener{
 		}
 		shootGuest(guest, guest.getBoat());
 	}
+	*/
+	public void shootAt(int col, int row) {
+		PartyGuest guest = guestGrid[col][row];
+		if (guest == null) {
+			PartyLog.log("Miss!");
+			squareGrid[col][row].setIcon(missImage);
+			return;
+		}
+
+		PartyBoat boat = guest.getBoat();
+		if (boat == null) {
+			PartyLog.log("A guest of honor was hit! Bouncing...");
+			shootAt(rng.nextInt(COLS), rng.nextInt(ROWS));
+		} else {
+			squareGrid[col][row].setIcon(explosionImage);
+			shootGuest(guest, boat);
+		}
+	}
 	
 	private void shootGuest(PartyGuest guest, PartyBoat boat) {
 		
-		
-		guest.getTriggerButton().setIcon(explosionImage);
+		//guest.getTriggerButton().setIcon(explosionImage);
 		guest.setAlive(false);
 		
 		System.out.println("Waa! The guest " + guest.getName() + " of " + boat.getName() + " was hit!");

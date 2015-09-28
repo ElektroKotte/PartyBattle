@@ -1,0 +1,48 @@
+{
+	"cols": 8,
+	"rows": 8,
+	"backgroundImage": "map.jpg",
+	"explosionImage": "explosion.png",
+	"missImage":"boat.png",
+	"boatImage": "boat.png",
+	"guestsOfHonor": [
+		{
+			"name": "Ufuk",
+			"col": 1,
+			"row": 1
+		}
+	],
+	"boats": [
+		{
+			"name": "MS Whatknot",
+			"guests": [
+				{
+					"name": "Foo Barsson",
+					"col": 5,
+					"row": 5
+				},
+				{
+					"name": "Bar Foosson",
+					"col": 5,
+					"row": 6
+				}
+			]
+		},
+		{
+			"name": "MS Herpaderp!",
+			"guests": [
+				{
+					"name": "John Dorian",
+					"col": 6,
+					"row": 6
+				},
+				{
+					"name": "Christphoer Turk",
+					"col": 6,
+					"row": 7
+				}
+			]
+		}
+	]
+}
+

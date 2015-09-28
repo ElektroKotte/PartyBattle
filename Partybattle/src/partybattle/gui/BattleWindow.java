@@ -29,7 +29,7 @@ public class BattleWindow extends JFrame implements ActionListener{
 	{
 		super("PartyBattle");
 		
-		guest_map = new HashMap<>();
+		guest_map = new HashMap();
 		
 		explosionImage = new ImageIcon(settings.getExplsionImagePath());
 		boatImage = new ImageIcon(settings.getBoatImagePath());
@@ -43,36 +43,46 @@ public class BattleWindow extends JFrame implements ActionListener{
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		GridLayout layout = new GridLayout(settings.getRows(), settings.getCols());
+		GridLayout layout = new GridLayout(settings.getRows()+1, settings.getCols()+1);
 
 		JLabel background = new JLabel(new ImageIcon(settings.getBackgroundImagePath()));
 		setContentPane(background);
 		
 		setLayout(layout);
 		
-		for (int row = 0; row < ROWS; row++) {
-			for (int col = 0; col < COLS; col++) {
-				JButton button = new JButton();
-				String identifier = new String(col + "," + row);
-				PartyGuest guest = settings.getGuestAt(col, row);
-				if (guest != null) {
-					guest.setTriggerButton(button);
+		String[] colNames = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"};
+		
+		for (int row = -1; row < ROWS; row++) {
+			for (int col = -1; col < COLS; col++) {
+				if (row < 0 && col < 0) {
+					add(legendLabel(""));
+				} else if (row < 0 && col >= 0) {
+					add(legendLabel(colNames[col]));
+				} else if (col < 0 && row >= 0) {
+					add(legendLabel(""+(row+1)));
+				} else if (col >= 0 && row >= 0) {
+					JButton button = new JButton();
+					String identifier = col + "," + row;
+					PartyGuest guest = settings.getGuestAt(col, row);
+					if (guest != null) {
+						guest.setTriggerButton(button);
+					}
+					
+					ImageIcon image = settings.getImageForButton(col, row);
+					if (image != null) {
+						System.out.println("Setting image for " + col + ", " + row);
+						button.setIcon(image);
+					}
+					button.setOpaque(false);
+					button.setContentAreaFilled(false);
+					button.setBorderPainted(true);
+					button.setActionCommand(identifier);
+					button.addActionListener(this);
+	
+					guest_map.put(identifier, guest);
+					
+					add(button);
 				}
-				
-				ImageIcon image = settings.getImageForButton(col, row);
-				if (image != null) {
-					System.out.println("Setting image for " + col + ", " + row);
-					button.setIcon(image);
-				}
-				button.setOpaque(false);
-				button.setContentAreaFilled(false);
-				button.setBorderPainted(true);
-				button.setActionCommand(identifier);
-				button.addActionListener(this);
-
-				guest_map.put(identifier, guest);
-				
-				add(button);
 			}
 		}
 
@@ -130,5 +140,10 @@ public class BattleWindow extends JFrame implements ActionListener{
 		if (sunkBoat) {
 			System.out.println("The ship " + boat.getName() + " is no moar! The guest of honor may take a shot!");
 		}
+	}
+	
+	public static JLabel legendLabel(String str) {
+		JLabel l = new JLabel(str, null, JLabel.CENTER);
+		return l;
 	}
 }

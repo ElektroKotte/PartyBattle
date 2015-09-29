@@ -39,5 +39,9 @@ public class PartyGuest {
 	public boolean isAlive() {
 		return alive;
 	}
+	
+	public boolean isSpecial() {
+		return boat == null;
+	}
 }
 

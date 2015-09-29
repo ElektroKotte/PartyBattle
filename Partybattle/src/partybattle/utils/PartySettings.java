@@ -47,8 +47,19 @@ public class PartySettings {
 		String[] guestsOfHonor;
 		String[][] guests;
 	}
+		
+	private int cols;
+	private int rows;
+	
+	private PartyGuest[][] guests;
+	
+	private String mapImagePath;
+	private String explosionImagePath;
+	private String boatImagePath;
+	private String splashImagePath;
 	
 	private String[][] guestNames;
+	
 	private String[] guestsOfHonor;
 	
 	private class SettingsDeserializer implements JsonDeserializer<BattlePlan> {
@@ -69,21 +80,12 @@ public class PartySettings {
 				boat.name = jsonBoat.get("name").getAsString();
 				boat.guests = context.deserialize(jsonBoat.get("guests"), Guest[].class);
 				guests.boats[i] = boat;
-
 			}
 
 			return guests;
 		}
 	}
-	
-	private int cols;
-	private int rows;
-	
-	private PartyGuest[][] guests;
-	private String mapImagePath;
-	private String explosionImagePath;
-	private String boatImagePath;
-	private String splashImagePath;
+
 	
 	private void addGuestAt(String guestName, PartyBoat boat, int col, int row) {
 		guests[col][row] = new PartyGuest(guestName, boat);
@@ -152,7 +154,7 @@ public class PartySettings {
 	public PartySettings() throws IOException {
 		this("settings.json", "battle_plan.json", "guests.json");
 	}
-
+	
 	public int getRows() {
 		return rows;
 	}

@@ -2,7 +2,6 @@ package partybattle;
 
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import partybattle.gui.*;
@@ -16,6 +15,7 @@ public class PartyBattle implements Runnable {
 	public PartyBattle(boolean planner_mode) {
 		PartyLog.log("Created PartyBattle object with param: " + planner_mode);
 		this.planner_mode = planner_mode; 
+
 		try {
 			this.settings = new PartySettings();
 		} catch (IOException e) {

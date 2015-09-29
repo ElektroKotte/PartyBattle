@@ -98,21 +98,50 @@ public class BattlePlannerWindow extends JFrame implements ActionListener{
 		PartyLog.log("Pressed button " + e.getActionCommand());
 		
 		PartyGuest guest = guestQueue.poll();
+		
+		StringBuilder sb = new StringBuilder();
 		if (guest == null) {
-			// TODO output as JSON here
-			// TODO Output geusts of honor
+			// This method is flawed, but is quick to implement, and easy to clean up using external tools
+			sb.append("{");
+			sb.append("\"guestOfHonor\":");
+			sb.append("[");
 			for (PartyGuest honorGuest : honorSet) {
+				Coord coord = guestMap.get(honorGuest);
 				PartyLog.log("HonorGuest: " + honorGuest.getName());
+				
+				sb.append("{");
+				sb.append("\"name\":\"" + honorGuest.getName() + "\",");
+				sb.append("\"col\":" + coord.col + ",");
+				sb.append("\"row\":" + coord.row + "");				
+				sb.append("},");
 			}
+			sb.append("],");
+			sb.append("\"boats\":");
+			sb.append("[");
 			for (PartyBoat boat : boatSet) {
 				PartyLog.log(boat.getName());
+				sb.append("{");
+				sb.append("\"guests\":");
+				sb.append("[");
 				for (PartyGuest partyGuest : boat.getCrew()) {
 					Coord coord = guestMap.get(partyGuest);
 					PartyLog.log("- " + partyGuest.getName() + " (" + coord.col + ", " + coord.row + ")");
+					sb.append("{");
+					sb.append("\"name\":\"" + partyGuest.getName() + "\",");
+					sb.append("\"col\":" + coord.col + ",");
+					sb.append("\"row\":" + coord.row);
+					sb.append("}");
 				}
+				sb.append("]");
+				sb.append("},");
 			}
+			sb.append("]");
+			sb.append("}");	
+			PartyLog.log("JSON: " + sb.toString());
 			return;
 		}
+		
+
 		
 		ButtonData buttonData = buttonMap.get(e.getActionCommand());
 		

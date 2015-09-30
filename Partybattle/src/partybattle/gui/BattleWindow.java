@@ -1,6 +1,9 @@
 package partybattle.gui;
 
-import partybattle.utils.*;
+import partybattle.Board;
+import partybattle.Guest;
+import partybattle.PartyLog;
+import partybattle.Position;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -11,46 +14,41 @@ import javax.swing.*;
 public class BattleWindow extends JFrame {
 	private static final long serialVersionUID = 3427642868750313104L;
 
-	private PartyGuest[][] guestGrid;
 	private BattleSquare[][] squareGrid;
+	private Board board;
 	
 	private ImageIcon explosionImage;
 	private ImageIcon boatImage;
 	private ImageIcon missImage;
 	private Random rng;
 	
-	private final int COLS;
-	private final int ROWS;
-	
-	public BattleWindow(PartySettings settings)
-	{
+	public BattleWindow(Board board) {
+		
 		super("PartyBattle");
 		
-		explosionImage = new ImageIcon(settings.getExplsionImagePath());
-		boatImage = new ImageIcon(settings.getBoatImagePath());
-		missImage = new ImageIcon(settings.getSplashImagePath());
+		this.board = board;
 		
-		rng = new Random();
+		explosionImage = new ImageIcon("hit.png");
+		boatImage = new ImageIcon("boat.png");
+		missImage = new ImageIcon("miss.png");
+		ImageIcon mapImage = new ImageIcon("map.png");
+		ImageIcon lighthouseImage = new ImageIcon("lighthouse2.png");
 		
-		COLS = settings.getCols();
-		ROWS = settings.getRows();
+		rng = new Random(1);
 		
-		guestGrid = new PartyGuest[COLS][ROWS];
-		squareGrid = new BattleSquare[COLS][ROWS];
+		squareGrid = new BattleSquare[board.COLS][board.ROWS];
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		GridLayout layout = new GridLayout(settings.getRows()+1, settings.getCols()+1);
-
-		JLabel background = new JLabel(new ImageIcon(settings.getBackgroundImagePath()));
-		setContentPane(background);
+		GridLayout layout = new GridLayout(board.ROWS+1, board.COLS+1);
 		
+		setContentPane(new JLabel(mapImage));
 		setLayout(layout);
 		
 		String[] colNames = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"};
 		
-		for (int row = -1; row < ROWS; row++) {
-			for (int col = -1; col < COLS; col++) {
+		for (int row = -1; row < board.ROWS; row++) {
+			for (int col = -1; col < board.COLS; col++) {
 				if (row < 0 && col < 0) {
 					add(legendLabel(""));
 				} else if (row < 0 && col >= 0) {
@@ -58,13 +56,12 @@ public class BattleWindow extends JFrame {
 				} else if (col < 0 && row >= 0) {
 					add(legendLabel(""+(row+1)));
 				} else if (col >= 0 && row >= 0) {
-					BattleSquare r 		= new BattleSquare(col, row, this);
-					PartyGuest guest 	= settings.getGuestAt(col, row);
-					guestGrid[col][row] = guest;
+					BattleSquare r 	= new BattleSquare(col, row, this);
+					Guest guest 	= board.guestAt(col, row);
 					squareGrid[col][row] = r;
-					if (guest.isSpecial()) {
+					if (guest != null && guest.isSpecial()) {
 						System.out.println("Setting image for " + col + ", " + row);
-						r.setIcon(settings.getImageForButton(col, row));
+						r.setIcon(lighthouseImage);
 					}
 					add(r);
 				}
@@ -76,42 +73,52 @@ public class BattleWindow extends JFrame {
         pack();
 	}
 	
+	
 	public void shootAt(int col, int row) {
-		PartyGuest guest = guestGrid[col][row];
+		Guest guest = board.guestAt(col, row);
 		if (guest == null) {
 			PartyLog.log("Miss!");
 			squareGrid[col][row].setIcon(missImage);
 			return;
 		}
 
-		PartyBoat boat = guest.getBoat();
-		if (boat == null) {
+		if (guest.isSpecial()) {
 			PartyLog.log("A guest of honor was hit! Bouncing...");
-			shootAt(rng.nextInt(COLS), rng.nextInt(ROWS));
+			shootAt(rng.nextInt(board.COLS), rng.nextInt(board.ROWS));
 		} else {
 			squareGrid[col][row].setIcon(explosionImage);
-			shootGuest(guest, boat);
+			shootGuest(guest);
 		}
 	}
 	
-	private void shootGuest(PartyGuest guest, PartyBoat boat) {
-		guest.setAlive(false);
+	
+	
+	private void shootGuest(Guest guest) {
+		guest.alive = false;
 		
-		System.out.println("Waa! The guest " + guest.getName() + " of " + boat.getName() + " was hit!");
+		System.out.println("Waa! The guest " + guest.name + " of " + guest.boat.name + " was hit!");
 		
 		boolean sunkBoat = true;
-		for (PartyGuest crew : boat.getCrew()) {
-			if (crew != guest && crew.isAlive()) {
-				crew.getTriggerButton().setIcon(boatImage);
-				System.out.println(crew.getName() + " is now allowed to shoot!");
-				sunkBoat = false;
-			}
+		Position crewmatePos = guest.crewmatePosition();
+		Guest crewmate = board.guestAt(crewmatePos);
+		
+		if (crewmate.alive) {
+			PartyLog.log(crewmate.name + " is now allowed to shoot!");
+			setImageAt(crewmatePos, boatImage);
+		} else {
+			
 		}
 		
 		if (sunkBoat) {
-			System.out.println("The ship " + boat.getName() + " is no moar! The guest of honor may take a shot!");
+			PartyLog.log("The ship " + guest.boat.name + " is no moar! The guest of honor may take a shot!");
 		}
 	}
+	
+	
+	private void setImageAt(Position p, ImageIcon img) {
+		squareGrid[p.col][p.row].setIcon(img);
+	}
+	
 	
 	public static JLabel legendLabel(String str) {
 		JLabel l = new JLabel(str, null, JLabel.CENTER);

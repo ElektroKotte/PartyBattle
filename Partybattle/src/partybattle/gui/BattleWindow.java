@@ -17,20 +17,18 @@ public class BattleWindow extends JFrame {
 	private BattleSquare[][] squareGrid;
 	private Board board;
 	
-	private ImageIcon explosionImage;
-	private ImageIcon boatImage;
-	private ImageIcon missImage;
 	private Random rng;
+	
+	Assets assets;
 	
 	public BattleWindow(Board board) {
 		
 		super("PartyBattle");
 		
 		this.board = board;
+
+		assets = new Assets();
 		
-		explosionImage = new ImageIcon("hit.png");
-		boatImage = new ImageIcon("boat.png");
-		missImage = new ImageIcon("miss.png");
 		ImageIcon mapImage = new ImageIcon("map.png");
 		ImageIcon lighthouseImage = new ImageIcon("lighthouse2.png");
 		
@@ -61,14 +59,14 @@ public class BattleWindow extends JFrame {
 					squareGrid[col][row] = r;
 					if (guest != null && guest.isSpecial()) {
 						System.out.println("Setting image for " + col + ", " + row);
-						r.setIcon(lighthouseImage);
+						r.setImage(lighthouseImage);
 					}
 					add(r);
 				}
 			}
 		}
 
-		setSize(new Dimension(800, 600));
+		setPreferredSize(new Dimension(800, 600));
 		
         pack();
 	}
@@ -78,7 +76,7 @@ public class BattleWindow extends JFrame {
 		Guest guest = board.guestAt(col, row);
 		if (guest == null) {
 			PartyLog.log("Miss!");
-			squareGrid[col][row].setIcon(missImage);
+			setImageAt(col, row, assets.missImage);
 			return;
 		}
 
@@ -86,7 +84,7 @@ public class BattleWindow extends JFrame {
 			PartyLog.log("A guest of honor was hit! Bouncing...");
 			shootAt(rng.nextInt(board.COLS), rng.nextInt(board.ROWS));
 		} else {
-			squareGrid[col][row].setIcon(explosionImage);
+			setImageAt(col, row, assets.sunkenBoats[guest.boatPos()]);
 			shootGuest(guest);
 		}
 	}
@@ -98,25 +96,25 @@ public class BattleWindow extends JFrame {
 		
 		System.out.println("Waa! The guest " + guest.name + " of " + guest.boat.name + " was hit!");
 		
-		boolean sunkBoat = true;
 		Position crewmatePos = guest.crewmatePosition();
 		Guest crewmate = board.guestAt(crewmatePos);
 		
 		if (crewmate.alive) {
 			PartyLog.log(crewmate.name + " is now allowed to shoot!");
-			setImageAt(crewmatePos, boatImage);
+			setImageAt(crewmatePos, assets.boats[crewmate.boatPos()]);
 		} else {
-			
-		}
-		
-		if (sunkBoat) {
 			PartyLog.log("The ship " + guest.boat.name + " is no moar! The guest of honor may take a shot!");
 		}
 	}
 	
 	
+	private void setImageAt(int col, int row, ImageIcon img) {
+		squareGrid[col][row].setImage(img);
+	}
+	
+	
 	private void setImageAt(Position p, ImageIcon img) {
-		squareGrid[p.col][p.row].setIcon(img);
+		squareGrid[p.col][p.row].setImage(img);
 	}
 	
 	

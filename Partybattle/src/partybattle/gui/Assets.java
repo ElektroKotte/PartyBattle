@@ -4,14 +4,14 @@ import javax.swing.ImageIcon;
 
 public class Assets {
 
-
-	public ImageIcon explosionImage = new ImageIcon("hit.png");
-	public ImageIcon boatImage = new ImageIcon("boat.png");
-	public ImageIcon missImage = new ImageIcon("miss.png");
+	public static ImageIcon mapImage = new ImageIcon("map.png");
+	public static ImageIcon explosionImage = new ImageIcon("hit.png");
+	public static ImageIcon boatImage = new ImageIcon("boat.png");
+	public static ImageIcon missImage = new ImageIcon("miss.png");
 	
-	public ImageIcon lightHouse = new ImageIcon("lighthouse2.png");
+	public static ImageIcon lightHouse = new ImageIcon("lighthouse2.png");
 	
-	public ImageIcon[] boats = {
+	public static ImageIcon[] boats = {
 		lightHouse,
 		new ImageIcon("boat_hor1.png"),
 		new ImageIcon("boat_hor2.png"),
@@ -19,7 +19,7 @@ public class Assets {
 		new ImageIcon("boat_ver2.png")
 	};
 	
-	public ImageIcon[] sunkenBoats = {
+	public static ImageIcon[] sunkenBoats = {
 			lightHouse,
 		new ImageIcon("boat_hor1_sunk.png"),
 		new ImageIcon("boat_hor2_sunk.png"),

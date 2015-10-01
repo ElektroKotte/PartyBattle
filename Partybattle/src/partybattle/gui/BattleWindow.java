@@ -17,6 +17,7 @@ public class BattleWindow extends JFrame {
 
 	public Board board;
 	public StatusRows statusRows = new StatusRows();
+	public ButtonBar buttonBar;
 	public BattleGrid grid;
 	private Random rng;
 	
@@ -26,9 +27,11 @@ public class BattleWindow extends JFrame {
 		
 		this.board = board;
 		grid = new BattleGrid(board, this);
+		buttonBar = new ButtonBar(this);
 		setLayout(new BorderLayout());
 		add(grid, BorderLayout.CENTER);
 		add(statusRows, BorderLayout.NORTH);
+		add(buttonBar, BorderLayout.EAST);
 
 		rng = new Random(1);
 		
@@ -39,7 +42,10 @@ public class BattleWindow extends JFrame {
         pack();
         
         for (Position pos : board.getSpecialPositions())
-        	grid.setImageAt(pos, Assets.lightHouse, board.guestAt(pos).name);
+        	grid.setImageAt(
+        			pos, 
+        			Assets.lightHouse, 
+        			board.guestAt(pos).name);
 	}
 	
 	
@@ -58,7 +64,10 @@ public class BattleWindow extends JFrame {
 			int direction = guest.boatPos();
 			PartyLog.log("Direction: " + direction);
 			PartyLog.log("Setting image to: " + Assets.sunkenBoats[direction]);
-			grid.setImageAt(col, row, Assets.sunkenBoats[direction], guest.name);
+			grid.setImageAt(
+					col, row, 
+					Assets.sunkenBoats[direction], 
+					guest.name);
 			shootGuest(guest);
 		}
 	}
@@ -75,16 +84,35 @@ public class BattleWindow extends JFrame {
 		
 		if (crewmate.alive) {
 			status(crewmate.name + " is now allowed to shoot!");
-			grid.setImageAt(crewmatePos, Assets.boats[crewmate.boatPos()], crewmate.name);
+			grid.setImageAt(
+					crewmatePos, 
+					Assets.boats[crewmate.boatPos()], 
+					crewmate.name);
 		} else {
 			status("The ship of " + guest.name + " and " + crewmate.name + "is no more! The guest of honor may take a shot!");
 		}
 	}
 	
+	public void showGuest(Position pos) {
+		Guest g = board.guestAt(pos);
+		ImageIcon[] imgs = g.alive ? Assets.boats : Assets.sunkenBoats;
+		grid.setImageAt(pos, imgs[g.boatPos()], g.name);
+	}
+	
 	public void showBoat(Boat boat) {
 		status(boat.guest1.name + " and "+boat.guest2.name);
-		grid.setImageAt(boat.pos1, Assets.boats[boat.guest1.boatPos()], boat.guest1.name);
-		grid.setImageAt(boat.pos2, Assets.boats[boat.guest2.boatPos()], boat.guest2.name);
+		showGuest(boat.pos1);
+		showGuest(boat.pos2);
+	}
+	
+	public void showAll() {
+	    for (Position pos : board.getSpecialPositions())
+        	grid.setImageAt(
+        			pos, 
+        			Assets.lightHouse, 
+        			board.guestAt(pos).name);
+	    for (Boat boat : board.getBoats())
+	    	showBoat(boat);
 	}
 	
 	

@@ -2,11 +2,15 @@ package partybattle;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
 import partybattle.gui.*;
@@ -15,6 +19,9 @@ public class PartyBattle implements Runnable {
 
 	int COLS = 8;
 	int ROWS = 8;
+
+	int PNG_WIDTH = 800;
+	int PNG_HEIGHT = 800;
 	
 	List<String> guests;
 	
@@ -74,15 +81,31 @@ public class PartyBattle implements Runnable {
 			line = r.readLine();
 		}
 		r.close();
-		// TODO: Here goes code that opens a file with one guest per line and reads it.
 		return l;
 	}
 	
-	public static void printBoatBoards(Board b) {
+	public void printBoatBoards(Board b) {
 		for (Boat boat : b.getBoats()) {
 			BattleWindow g = new BattleWindow(b);
+			g.setSize(new Dimension(PNG_WIDTH, PNG_HEIGHT));
+			g.setVisible(true);
+			g.pack();
 			g.showBoat(boat);
-			g.paint(g);
+			
+			BufferedImage bi = new BufferedImage(g.getSize().width, g.getSize().height, BufferedImage.TYPE_INT_ARGB);
+		    Graphics2D ig2 = bi.createGraphics();
+			g.paint(ig2);
+			ig2.dispose();
+			try {
+				File dir = new File("boatBoards");
+				if (!dir.exists())
+					dir.mkdir();
+				ImageIO.write(bi, "PNG", new File(dir, boat.guest1.name+"_"+boat.guest2.name+".png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			g.dispose();
 		}
 	}
 }

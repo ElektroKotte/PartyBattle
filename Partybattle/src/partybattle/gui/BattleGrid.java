@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import partybattle.Board;
 import partybattle.Guest;
 import partybattle.Position;
 
@@ -14,9 +15,9 @@ public class BattleGrid extends JComponent {
 	private BattleSquare[][] squareGrid;
 	private static String[] colNames = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"};
 	
-	public BattleGrid(BattleWindow bw) {
-		int COLS = bw.board.COLS;
-		int ROWS = bw.board.ROWS;
+	public BattleGrid(Board b, BattleWindow bw) {
+		int COLS = b.COLS;
+		int ROWS = b.ROWS;
 		GridLayout layout = new GridLayout(ROWS+1, COLS+1);
 		
 		//setContentPane(new JLabel(Assets.mapImage));
@@ -35,7 +36,7 @@ public class BattleGrid extends JComponent {
 					add(legendLabel(""+(row+1)));
 				} else if (col >= 0 && row >= 0) {
 					BattleSquare r 	= new BattleSquare(col, row, bw);
-					Guest guest 	= bw.board.guestAt(col, row);
+					Guest guest 	= b.guestAt(col, row);
 					squareGrid[col][row] = r;
 					if (guest != null && guest.isSpecial()) {
 						System.out.println("Setting image for " + col + ", " + row);

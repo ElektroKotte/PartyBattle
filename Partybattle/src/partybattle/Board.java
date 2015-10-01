@@ -1,6 +1,5 @@
 package partybattle;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -20,7 +19,7 @@ public class Board {
 		
 		guestGrid = new Guest[COLS][ROWS];
 		
-		java.util.Collections.shuffle(guests);
+		java.util.Collections.shuffle(guests, rng);
 		for (int i = 0; i < guests.size()-1; i += 2) {
 			Boat boat = randomValidBoat(guests.get(i), guests.get(i+1));
 			addValidBoat(boat);

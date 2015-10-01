@@ -8,7 +8,6 @@ import partybattle.Position;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.util.Random;
 
 import javax.swing.*;
@@ -17,9 +16,8 @@ public class BattleWindow extends JFrame {
 	private static final long serialVersionUID = 3427642868750313104L;
 
 	public Board board;
-	
-	private StatusRows statusRows = new StatusRows();
-	private BattleGrid grid;
+	public StatusRows statusRows = new StatusRows();
+	public BattleGrid grid;
 	private Random rng;
 	
 	public BattleWindow(Board board) {
@@ -27,16 +25,14 @@ public class BattleWindow extends JFrame {
 		super("PartyBattle");
 		
 		this.board = board;
-		
-		grid = new BattleGrid(this);
-		rng = new Random(1);
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		grid = new BattleGrid(board, this);
 		setLayout(new BorderLayout());
 		add(grid, BorderLayout.CENTER);
 		add(statusRows, BorderLayout.NORTH);
 
+		rng = new Random(1);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setPreferredSize(new Dimension(800, 600));
 		
         pack();
@@ -77,7 +73,6 @@ public class BattleWindow extends JFrame {
 			status("The ship of " + guest.name + " and " + crewmate.name + "is no more! The guest of honor may take a shot!");
 		}
 	}
-	
 	
 	public void showBoat(Boat boat) {
 		status(boat.guest1.name + " and "+boat.guest2.name);

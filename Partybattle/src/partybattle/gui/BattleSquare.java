@@ -39,7 +39,10 @@ public class BattleSquare extends JButton implements ActionListener {
 	
 	public void setImage(ImageIcon ii, String str) {
 		Dimension dim = getSize();
-		ImageIcon scaledIcon = new ImageIcon(ii.getImage().getScaledInstance(dim.width, dim.height, java.awt.Image.SCALE_SMOOTH));
-		setIcon(scaledIcon);
+
+		Image scaledImg = ii.getImage().getScaledInstance(dim.width, dim.height, java.awt.Image.SCALE_SMOOTH);
+		setIcon(new ImageIcon(scaledImg));
+		setText(str);
+
 	}
 }

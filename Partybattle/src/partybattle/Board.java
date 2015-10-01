@@ -17,11 +17,15 @@ public class Board {
 		
 		guestGrid = new Guest[COLS][ROWS];
 		
+		guestGrid[rng.nextInt(COLS)][rng.nextInt(ROWS)] = new Guest("Ufuk Kirik", null);
+		
 		java.util.Collections.shuffle(guests);
 		for (int i = 0; i < guests.size()-1; i += 2) {
 			Boat boat = randomValidBoat(guests.get(i), guests.get(i+1));
 			addValidBoat(boat);
 		}
+		
+		
 		//TODO: handle the odd guest!
 		//	either make special, or partner with him/herself
 	}

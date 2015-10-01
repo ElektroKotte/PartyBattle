@@ -2,11 +2,11 @@ package partybattle;
 
 public class Guest {
 
-	public static int SPECIAL = 0;
-	public static int LEFT = 1;
-	public static int RIGHT = 2;
-	public static int UP = 3;
-	public static int DOWN = 4;
+	public static final int SPECIAL = 0;
+	public static final int LEFT = 1;
+	public static final int RIGHT = 2;
+	public static final int UP = 3;
+	public static final int DOWN = 4;
 	
 	public String name;
 	public Boat boat;
@@ -33,12 +33,13 @@ public class Guest {
 	
 	public int boatPos() {
 		if (boat == null) return SPECIAL;
-		if (boat.guest1 == this)
+		if (boat.guest1 == this) {
 			if (boat.pos1.col != boat.pos2.col) return LEFT;
 			else return UP;
-		else
+		} else {
 			if (boat.pos1.col != boat.pos2.col) return RIGHT;
 			else return DOWN;
+		}
 	}
 }
 

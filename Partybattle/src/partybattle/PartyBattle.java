@@ -17,38 +17,38 @@ import partybattle.gui.*;
 
 public class PartyBattle implements Runnable {
 
-	int COLS = 8;
-	int ROWS = 8;
-
 	int PNG_WIDTH = 800;
 	int PNG_HEIGHT = 800;
 	
 	List<String> guests;
+	Board board;
 	
-	public PartyBattle(int n, List<String> guests) {
+	public PartyBattle(int n, List<String> guests, boolean printPNGs) {
 		this.guests = guests;
-		COLS = n;
-		ROWS = n;
+		board = new Board(n, n, guests);
+		
+		if (printPNGs)
+			printBoatBoards(board);
+		
 	}
 	
 	public void run() {
-		Board board = new Board(COLS, ROWS, guests);
 		BattleWindow window = new BattleWindow(board);
-		printBoatBoards(board);
 		window.setVisible(true);
 	}
 	
 	public static void main(String[] args) {
-		if (args.length < 2) {
-			System.out.println("missing n and guestlist. Good bye!");
+		if (args.length < 3) {
+			System.out.println("usage:\n PartyBattle N guestListPath pngFlag. Good bye!");
 			System.exit(1);
 		}
 		
 		int n = Integer.parseInt(args[0]);
 		File guestList = new File(args[1]);
-			
+		boolean printPNGs = Boolean.parseBoolean(args[2]);
+		
 		try {
-			SwingUtilities.invokeLater(new PartyBattle(n, readGuests(guestList)));
+			SwingUtilities.invokeLater(new PartyBattle(n, readGuests(guestList), printPNGs));
 		} catch(IOException e) {
 			System.out.println("Failed reading guestList");
 			e.printStackTrace();

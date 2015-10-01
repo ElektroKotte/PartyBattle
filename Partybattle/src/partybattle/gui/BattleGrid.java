@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 
 import partybattle.Board;
 import partybattle.Guest;
+import partybattle.PartyLog;
 import partybattle.Position;
 
 public class BattleGrid extends JComponent {
@@ -35,6 +36,7 @@ public class BattleGrid extends JComponent {
 				} else if (col < 0 && row >= 0) {
 					add(legendLabel(""+(row+1)));
 				} else if (col >= 0 && row >= 0) {
+					PartyLog.log("Adding " + col + ", " + row);
 					BattleSquare r 	= new BattleSquare(col, row, bw);
 					Guest guest 	= b.guestAt(col, row);
 					squareGrid[col][row] = r;

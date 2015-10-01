@@ -9,6 +9,8 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import partybattle.PartyLog;
+
 public class BattleSquare extends JButton implements ActionListener {
 
 	BattleWindow window;
@@ -35,6 +37,8 @@ public class BattleSquare extends JButton implements ActionListener {
 	
 	public void setImage(ImageIcon ii) {
 		Dimension dim = getSize();
-		setIcon(new ImageIcon(ii.getImage().getScaledInstance(dim.width, dim.height, java.awt.Image.SCALE_SMOOTH)));
+		PartyLog.log("Scaling image to " + dim.width + " by " + dim.height + " pixels");
+		ImageIcon scaledIcon = new ImageIcon(ii.getImage().getScaledInstance(dim.width, dim.height, java.awt.Image.SCALE_SMOOTH));
+		setIcon(scaledIcon);
 	}
 }

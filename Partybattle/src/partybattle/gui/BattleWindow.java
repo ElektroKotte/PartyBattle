@@ -51,7 +51,10 @@ public class BattleWindow extends JFrame {
 			status("A guest of honor was hit! Bouncing...");
 			shootAt(rng.nextInt(board.COLS), rng.nextInt(board.ROWS));
 		} else {
-			grid.setImageAt(col, row, Assets.sunkenBoats[guest.boatPos()]);
+			int direction = guest.boatPos();
+			PartyLog.log("Direction: " + direction);
+			PartyLog.log("Setting image to: " + Assets.sunkenBoats[direction]);
+			grid.setImageAt(col, row, Assets.sunkenBoats[direction]);
 			shootGuest(guest);
 		}
 	}

@@ -3,7 +3,6 @@ package partybattle.gui;
 import javax.swing.ImageIcon;
 
 public class Assets {
-
 	public static ImageIcon mapImage = new ImageIcon("map.png");
 	public static ImageIcon explosionImage = new ImageIcon("hit.png");
 	public static ImageIcon boatImage = new ImageIcon("boat.png");
@@ -21,9 +20,9 @@ public class Assets {
 	
 	public static ImageIcon[] sunkenBoats = {
 			lightHouse,
-		new ImageIcon("boat_hor1_sunk.png"),
-		new ImageIcon("boat_hor2_sunk.png"),
-		new ImageIcon("boat_ver1_sunk.png"),
-		new ImageIcon("boat_ver2_sunk.png")
+			new ImageIcon("boat_hor1_sunk.png"),
+			new ImageIcon("boat_hor2_sunk.png"),
+			new ImageIcon("boat_ver1_sunk.png"),
+			new ImageIcon("boat_ver2_sunk.png")
 	};
 }

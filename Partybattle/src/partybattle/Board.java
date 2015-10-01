@@ -11,6 +11,7 @@ public class Board {
 
 	private Guest[][] guestGrid;
 	private List<Boat> boats = new LinkedList<Boat>();
+	private List<Position> specialPositions = new LinkedList<Position>();
 	private Random rng = new Random(1);
 	
 	public Board(int cols, int rows, List<String> guests) {
@@ -19,8 +20,9 @@ public class Board {
 		
 		guestGrid = new Guest[COLS][ROWS];
 
-		guestGrid[rng.nextInt(COLS)][rng.nextInt(ROWS)] = new Guest("Ufuk Kirik", null);
+		
 		java.util.Collections.shuffle(guests, rng);
+		addSpecial("Ufuk Kirik");
 		
 		for (int i = 0; i < guests.size()-1; i += 2) {
 			Boat boat = randomValidBoat(guests.get(i), guests.get(i+1));
@@ -30,6 +32,16 @@ public class Board {
 		
 		//TODO: handle the odd guest!
 		//	either make special, or partner with him/herself
+	}
+	
+	public void addSpecial(String name) {
+		int c = rng.nextInt(COLS);
+		int r = rng.nextInt(ROWS);
+		if (guestGrid[c][r] == null) {
+			Guest g = new Guest(name, null);
+			specialPositions.add(new Position(c, r));
+			guestGrid[c][r] = g;
+		} else addSpecial(name);
 	}
 	
 	public Guest guestAt(Position p) {
@@ -42,6 +54,10 @@ public class Board {
 	
 	public Iterable<Boat> getBoats() {
 		return boats;
+	}
+	
+	public Iterable<Position> getSpecialPositions() {
+		return specialPositions;
 	}
 	
 	private void addValidBoat(Boat boat) {

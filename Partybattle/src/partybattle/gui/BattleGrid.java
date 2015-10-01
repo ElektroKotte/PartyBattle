@@ -38,12 +38,7 @@ public class BattleGrid extends JComponent {
 				} else if (col >= 0 && row >= 0) {
 					PartyLog.log("Adding " + col + ", " + row);
 					BattleSquare r 	= new BattleSquare(col, row, bw);
-					Guest guest 	= b.guestAt(col, row);
 					squareGrid[col][row] = r;
-					if (guest != null && guest.isSpecial()) {
-						System.out.println("Setting image for " + col + ", " + row);
-						r.setImage(Assets.lightHouse);
-					}
 					add(r);
 				}
 			}

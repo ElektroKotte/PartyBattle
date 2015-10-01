@@ -36,6 +36,9 @@ public class BattleWindow extends JFrame {
 		setPreferredSize(new Dimension(800, 600));
 		
         pack();
+        
+        for (Position pos : board.getSpecialPositions())
+        	grid.setImageAt(pos, Assets.lightHouse);
 	}
 	
 	

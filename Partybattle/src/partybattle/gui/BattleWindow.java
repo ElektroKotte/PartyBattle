@@ -1,6 +1,7 @@
 package partybattle.gui;
 
 import partybattle.Board;
+import partybattle.Boat;
 import partybattle.Guest;
 import partybattle.PartyLog;
 import partybattle.Position;
@@ -78,7 +79,14 @@ public class BattleWindow extends JFrame {
 	}
 	
 	
-	private void status(String msg) {
+	public void showBoat(Boat boat) {
+		status(boat.guest1.name + " and "+boat.guest2.name);
+		grid.setImageAt(boat.pos1, Assets.boats[boat.guest1.boatPos()]);
+		grid.setImageAt(boat.pos2, Assets.boats[boat.guest2.boatPos()]);
+	}
+	
+	
+	public void status(String msg) {
 		PartyLog.log(msg);
 		statusRows.update(msg);
 	}

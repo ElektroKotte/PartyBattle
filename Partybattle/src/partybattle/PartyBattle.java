@@ -25,7 +25,9 @@ public class PartyBattle implements Runnable {
 	}
 	
 	public void run() {
-		BattleWindow window = new BattleWindow(new Board(COLS, ROWS, guests));
+		Board board = new Board(COLS, ROWS, guests);
+		BattleWindow window = new BattleWindow(board);
+		printBoatBoards(board);
 		window.setVisible(true);
 	}
 	
@@ -74,5 +76,13 @@ public class PartyBattle implements Runnable {
 		r.close();
 		// TODO: Here goes code that opens a file with one guest per line and reads it.
 		return l;
+	}
+	
+	public static void printBoatBoards(Board b) {
+		for (Boat boat : b.getBoats()) {
+			BattleWindow g = new BattleWindow(b);
+			g.showBoat(boat);
+			g.paint(g);
+		}
 	}
 }

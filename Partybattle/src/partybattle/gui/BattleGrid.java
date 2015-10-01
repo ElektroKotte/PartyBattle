@@ -6,7 +6,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import partybattle.Board;
 import partybattle.Guest;
 import partybattle.Position;
 

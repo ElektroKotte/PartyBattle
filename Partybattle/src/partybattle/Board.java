@@ -1,5 +1,7 @@
 package partybattle;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -9,6 +11,7 @@ public class Board {
 	public int ROWS;
 
 	private Guest[][] guestGrid;
+	private List<Boat> boats = new LinkedList<Boat>();
 	private Random rng = new Random(1);
 	
 	public Board(int cols, int rows, List<String> guests) {
@@ -34,7 +37,12 @@ public class Board {
 		return guestGrid[col][row];
 	}
 	
+	public Iterable<Boat> getBoats() {
+		return boats;
+	}
+	
 	private void addValidBoat(Boat boat) {
+		boats.add(boat);
 		guestGrid[boat.pos1.col][boat.pos1.row] = boat.guest1;
 		guestGrid[boat.pos2.col][boat.pos2.row] = boat.guest2;
 	}

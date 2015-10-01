@@ -2,6 +2,7 @@ package partybattle.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,7 +27,10 @@ public class BattleSquare extends JButton implements ActionListener {
 		setOpaque(false);
 		setContentAreaFilled(false);
 		setBorderPainted(true);
-		setBorder(BorderFactory.createLineBorder(Color.black));
+		setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+
+		setHorizontalTextPosition(JButton.CENTER);
+		setVerticalTextPosition(JButton.CENTER);
 		addActionListener(this);
 	}
 
@@ -35,10 +39,11 @@ public class BattleSquare extends JButton implements ActionListener {
 		window.shootAt(col, row);
 	}
 	
-	public void setImage(ImageIcon ii) {
+	public void setImage(ImageIcon ii, String str) {
 		Dimension dim = getSize();
 		PartyLog.log("Scaling image to " + dim.width + " by " + dim.height + " pixels");
-		ImageIcon scaledIcon = new ImageIcon(ii.getImage().getScaledInstance(dim.width, dim.height, java.awt.Image.SCALE_SMOOTH));
-		setIcon(scaledIcon);
+		Image scaledImg = ii.getImage().getScaledInstance(dim.width, dim.height, java.awt.Image.SCALE_SMOOTH);
+		setIcon(new ImageIcon(scaledImg));
+		setText(str);
 	}
 }

@@ -33,12 +33,13 @@ public class BattleWindow extends JFrame {
 		rng = new Random(1);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setPreferredSize(new Dimension(800, 600));
+		setPreferredSize(new Dimension(800, 800));
+		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
         pack();
         
         for (Position pos : board.getSpecialPositions())
-        	grid.setImageAt(pos, Assets.lightHouse);
+        	grid.setImageAt(pos, Assets.lightHouse, board.guestAt(pos).name);
 	}
 	
 	
@@ -46,7 +47,7 @@ public class BattleWindow extends JFrame {
 		Guest guest = board.guestAt(col, row);
 		if (guest == null) {
 			status("Miss!");
-			grid.setImageAt(col, row, Assets.missImage);
+			grid.setImageAt(col, row, Assets.missImage, "");
 			return;
 		}
 
@@ -57,7 +58,7 @@ public class BattleWindow extends JFrame {
 			int direction = guest.boatPos();
 			PartyLog.log("Direction: " + direction);
 			PartyLog.log("Setting image to: " + Assets.sunkenBoats[direction]);
-			grid.setImageAt(col, row, Assets.sunkenBoats[direction]);
+			grid.setImageAt(col, row, Assets.sunkenBoats[direction], guest.name);
 			shootGuest(guest);
 		}
 	}
@@ -74,7 +75,7 @@ public class BattleWindow extends JFrame {
 		
 		if (crewmate.alive) {
 			status(crewmate.name + " is now allowed to shoot!");
-			grid.setImageAt(crewmatePos, Assets.boats[crewmate.boatPos()]);
+			grid.setImageAt(crewmatePos, Assets.boats[crewmate.boatPos()], crewmate.name);
 		} else {
 			status("The ship of " + guest.name + " and " + crewmate.name + "is no more! The guest of honor may take a shot!");
 		}
@@ -82,8 +83,8 @@ public class BattleWindow extends JFrame {
 	
 	public void showBoat(Boat boat) {
 		status(boat.guest1.name + " and "+boat.guest2.name);
-		grid.setImageAt(boat.pos1, Assets.boats[boat.guest1.boatPos()]);
-		grid.setImageAt(boat.pos2, Assets.boats[boat.guest2.boatPos()]);
+		grid.setImageAt(boat.pos1, Assets.boats[boat.guest1.boatPos()], boat.guest1.name);
+		grid.setImageAt(boat.pos2, Assets.boats[boat.guest2.boatPos()], boat.guest2.name);
 	}
 	
 	

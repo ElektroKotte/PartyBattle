@@ -46,13 +46,13 @@ public class BattleGrid extends JComponent {
 	}
 	
 	
-	public void setImageAt(int col, int row, ImageIcon img) {
-		squareGrid[col][row].setImage(img);
+	public void setImageAt(int col, int row, ImageIcon img, String str) {
+		squareGrid[col][row].setImage(img, str);
 	}
 	
 	
-	public void setImageAt(Position p, ImageIcon img) {
-		squareGrid[p.col][p.row].setImage(img);
+	public void setImageAt(Position p, ImageIcon img, String str) {
+		squareGrid[p.col][p.row].setImage(img, str);
 	}
 	
 	

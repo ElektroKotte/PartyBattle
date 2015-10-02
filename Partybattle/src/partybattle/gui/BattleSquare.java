@@ -25,6 +25,7 @@ public class BattleSquare extends JButton implements ActionListener {
 		setOpaque(false);
 		setContentAreaFilled(false);
 		setBorderPainted(true);
+		setForeground(Color.WHITE);
 		setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 
 		setHorizontalTextPosition(JButton.CENTER);

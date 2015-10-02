@@ -1,5 +1,6 @@
 package partybattle.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -63,6 +64,7 @@ public class BattleGrid extends JComponent {
 	
 	public static JLabel legendLabel(String str) {
 		JLabel l = new JLabel(str, null, JLabel.CENTER);
+		l.setForeground(Color.WHITE);
 		return l;
 	}
 }

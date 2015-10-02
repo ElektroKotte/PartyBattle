@@ -28,10 +28,6 @@ public class Board {
 			Boat boat = randomValidBoat(guests.get(i), guests.get(i+1));
 			addValidBoat(boat);
 		}
-		
-		
-		//TODO: handle the odd guest!
-		//	either make special, or partner with him/herself
 	}
 	
 	public void addSpecial(String name) {

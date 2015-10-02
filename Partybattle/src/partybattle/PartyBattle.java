@@ -102,7 +102,6 @@ public class PartyBattle implements Runnable {
 					dir.mkdir();
 				ImageIO.write(bi, "PNG", new File(dir, boat.guest1.name+"_"+boat.guest2.name+".png"));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			g.dispose();

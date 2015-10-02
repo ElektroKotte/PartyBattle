@@ -10,10 +10,8 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import partybattle.PartyLog;
-
 public class BattleSquare extends JButton implements ActionListener {
-
+	private static final long serialVersionUID = 8818691559117820755L;
 	BattleWindow window;
 	int col;
 	int row;
@@ -41,9 +39,10 @@ public class BattleSquare extends JButton implements ActionListener {
 	
 	public void setImage(ImageIcon ii, String str) {
 		Dimension dim = getSize();
-		PartyLog.log("Scaling image to " + dim.width + " by " + dim.height + " pixels");
+
 		Image scaledImg = ii.getImage().getScaledInstance(dim.width, dim.height, java.awt.Image.SCALE_SMOOTH);
 		setIcon(new ImageIcon(scaledImg));
 		setText(str);
+
 	}
 }

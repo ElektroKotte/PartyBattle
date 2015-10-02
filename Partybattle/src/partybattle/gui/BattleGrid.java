@@ -49,14 +49,7 @@ public class BattleGrid extends JComponent {
 		super.paintComponent(g);
 		Dimension dim = getSize();
 		Image background = Assets.mapImage.getImage();
-		int squareWidth = dim.width / (squareGrid.length+1);
-		int squareHeight = dim.height / (squareGrid[1].length + 1);
-		g.drawImage(
-				background, 
-				squareWidth, squareHeight, 
-				squareWidth * squareGrid.length, 
-				squareHeight * squareGrid[1].length, 
-				null);
+		g.drawImage(background, 0, 0, dim.width, dim.height, null);
 	}
 	
 	public void setImageAt(int col, int row, ImageIcon img, String str) {
